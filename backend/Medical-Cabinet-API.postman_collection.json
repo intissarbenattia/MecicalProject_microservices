@@ -1,0 +1,1209 @@
+{
+  "info": {
+    "name": "Medical Cabinet API",
+    "description": "Collection complète pour tester l'API du cabinet médical",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patient_user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "medecin_user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patient_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "medecin_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rdv_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "consultation_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      }
+    },
+    {
+      "name": "1. Auth",
+      "item": [
+        {
+          "name": "Register - Secrétaire",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "    pm.collectionVariables.set('user_id', jsonData.utilisateur.id);",
+                  "    console.log('Token sauvegardé:', jsonData.token);",
+                  "    console.log('User ID:', jsonData.utilisateur.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Sophie\",\n  \"email\": \"sophie.martin@cabinet.com\",\n  \"mdp\": \"password123\",\n  \"role\": \"SECRETAIRE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register - Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('patient_user_id', jsonData.utilisateur.id);",
+                  "    console.log('Patient User ID:', jsonData.utilisateur.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean\",\n  \"email\": \"jean.dupont@email.com\",\n  \"mdp\": \"patient124\",\n  \"role\": \"PATIENT\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register - Médecin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('medecin_user_id', jsonData.utilisateur.id);",
+                  "    console.log('Medecin User ID:', jsonData.utilisateur.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Legrand\",\n  \"prenom\": \"Pierre\",\n  \"email\": \"pierre.legrand@cabinet.com\",\n  \"mdp\": \"medecin123\",\n  \"role\": \"MEDECIN\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login - Secrétaire",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "    console.log('Token sauvegardé:', jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sophie.martin@cabinet.com\",\n  \"mdp\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Sophie Marie\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/utilisateur",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "utilisateur"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ancienMdp\": \"password123\",\n  \"nouveauMdp\": \"newpassword456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/changer-mot-de-passe",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "changer-mot-de-passe"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Secrétaire",
+      "item": [
+        {
+          "name": "Create Secrétaire Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idUtilisateur\": \"{{user_id}}\",\n  \"dateEmbauche\": \"2024-01-15\",\n  \"fonction\": \"Secrétaire médicale principale\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/secretaires",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "secretaires"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Secrétaire Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/secretaires",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "secretaires"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Secrétaire Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fonction\": \"Secrétaire en chef\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/secretaires",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "secretaires"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Patients",
+      "item": [
+        {
+          "name": "Create Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('patient_id', jsonData.patient._id);",
+                  "    console.log('Patient ID:', jsonData.patient._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idUtilisateur\": \"{{patient_user_id}}\",\n  \"dateNaissance\": \"1985-03-20\",\n  \"sexe\": \"M\",\n  \"adresse\": \"15 Rue de la Santé, Paris\",\n  \"allergies\": \"Pénicilline, Pollen\",\n  \"antecedents\": \"Asthme léger\",\n  \"groupeSanguin\": \"A+\",\n  \"traitements\": \"Ventoline si besoin\",\n  \"vaccinations\": \"Toutes à jour\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/patients",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "patients"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "patients"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/{{patient_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "patients",
+                "{{patient_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"adresse\": \"25 Avenue Victor Hugo, Paris\",\n  \"traitements\": \"Ventoline + Antihistaminiques\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/patients/{{patient_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "patients",
+                "{{patient_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Patient RDV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/patients/{{patient_id}}/rendez-vous",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "patients",
+                "{{patient_id}}",
+                "rendez-vous"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload File",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Radio thorax.pdf\",\n  \"url\": \"https://exemple.com/fichiers/radio123.pdf\",\n  \"type\": \"Radiologie\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/patients/{{patient_id}}/fichiers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "patients",
+                "{{patient_id}}",
+                "fichiers"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Médecins",
+      "item": [
+        {
+          "name": "Create Médecin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('medecin_id', jsonData.medecin._id);",
+                  "    console.log('Medecin ID:', jsonData.medecin._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idUtilisateur\": \"{{medecin_user_id}}\",\n  \"specialite\": \"Médecine Générale\",\n  \"numeroOrdre\": \"MG123456\",\n  \"tarifConsultation\": 50\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/medecins",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "medecins"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Médecins",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/medecins",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "medecins"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Médecin by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/medecins/{{medecin_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "medecins",
+                "{{medecin_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Agenda Médecin",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/medecins/{{medecin_id}}/agenda?date=2024-12-15",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "medecins",
+                "{{medecin_id}}",
+                "agenda"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2024-12-15"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Check Disponibilité",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/medecins/{{medecin_id}}/disponibilite?date=2024-12-15&heure=09:00",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "medecins",
+                "{{medecin_id}}",
+                "disponibilite"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2024-12-15"
+                },
+                {
+                  "key": "heure",
+                  "value": "09:00"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Rendez-vous",
+      "item": [
+        {
+          "name": "Create RDV",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('rdv_id', jsonData.rendezVous._id);",
+                  "    console.log('RDV ID:', jsonData.rendezVous._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2024-12-15\",\n  \"heure\": \"09:00\",\n  \"motif\": \"Consultation générale\",\n  \"duree\": 30,\n  \"idPatient\": \"{{patient_id}}\",\n  \"idMedecin\": \"{{medecin_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rendez-vous",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rendez-vous"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List RDV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/rendez-vous",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rendez-vous"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get RDV by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/rendez-vous/{{rdv_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rendez-vous",
+                "{{rdv_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Verify Conflicts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/rendez-vous/verifier-conflits?date=2024-12-15&heure=09:00&idMedecin={{medecin_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rendez-vous",
+                "verifier-conflits"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2024-12-15"
+                },
+                {
+                  "key": "heure",
+                  "value": "09:00"
+                },
+                {
+                  "key": "idMedecin",
+                  "value": "{{medecin_id}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Confirm RDV",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/rendez-vous/{{rdv_id}}/confirmer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rendez-vous",
+                "{{rdv_id}}",
+                "confirmer"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancel RDV",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"raison\": \"Patient malade\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rendez-vous/{{rdv_id}}/annuler",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rendez-vous",
+                "{{rdv_id}}",
+                "annuler"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reschedule RDV",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2024-12-20\",\n  \"heure\": \"15:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rendez-vous/{{rdv_id}}/reprogrammer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rendez-vous",
+                "{{rdv_id}}",
+                "reprogrammer"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Consultations",
+      "item": [
+        {
+          "name": "Create Consultation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('consultation_id', jsonData.consultation._id);",
+                  "    console.log('Consultation ID:', jsonData.consultation._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"NORMALE\",\n  \"motif\": \"Consultation générale\",\n  \"diagnostic\": \"RAS\",\n  \"observations\": \"Patient en bonne santé\",\n  \"poids\": 75,\n  \"taille\": 180,\n  \"pressionArterielle\": \"12/8\",\n  \"montant\": 50,\n  \"idPatient\": \"{{patient_id}}\",\n  \"idMedecin\": \"{{medecin_id}}\",\n  \"idRendezVous\": \"{{rdv_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/consultations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "consultations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Consultations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/consultations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "consultations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Consultation by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/consultations/{{consultation_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "consultations",
+                "{{consultation_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Ordonnance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicaments\": \"Doliprane 1000mg\",\n  \"posologie\": \"1 comprimé 3 fois par jour\",\n  \"idConsultation\": \"{{consultation_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/consultations/ordonnances",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "consultations",
+                "ordonnances"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Certificat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"Arrêt de travail\",\n  \"contenu\": \"Je soussigné Dr. Legrand certifie que M. Dupont nécessite un repos de 3 jours\",\n  \"idConsultation\": \"{{consultation_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/consultations/certificats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "consultations",
+                "certificats"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Paiements",
+      "item": [
+        {
+          "name": "Create Paiement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"montant\": 50,\n  \"modePaiement\": \"CARTE\",\n  \"statut\": \"PAYE\",\n  \"idConsultation\": \"{{consultation_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/paiements",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paiements"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Paiements",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paiements",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paiements"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Statistiques Paiements",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paiements/statistiques",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paiements",
+                "statistiques"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
